@@ -1,0 +1,189 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:FakeProcess.UI.Controls"
+                    xmlns:Converters="clr-namespace:FakeProcess.UI.Converters">
+    <Converters:ProcessTypeToBackgroundConverter x:Key="TypeToBackgroundConverter"/>
+    <Converters:ProcessTypeToForegroundConverter x:Key="TypeToForegroundConverter"/>
+    <Converters:ValueConverter x:Key="ValueConverter"/>
+    <Style TargetType="Button">
+        <Setter Property="Background" Value="#545454"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                        </Border>
+                        <ContentPresenter x:Name="ButtonContent" 
+                                          Content="{Binding Path=Content, 
+                                          RelativeSource={RelativeSource TemplatedParent}}" 
+                                          HorizontalAlignment="center" 
+                                          VerticalAlignment="center">
+                        </ContentPresenter>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Button.IsPressed" Value="True">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="#545454"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value=".5"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="ToggleButton">
+        <Setter Property="Background" Value="#545454"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                        </Border>
+                        <ContentPresenter x:Name="ButtonContent" 
+                                          Content="{Binding Path=Content, 
+                                          RelativeSource={RelativeSource TemplatedParent}}" 
+                                          HorizontalAlignment="center" 
+                                          VerticalAlignment="center">
+                        </ContentPresenter>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                            <Setter Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="#545454"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type Controls:ProcessProgressBar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Controls:ProcessProgressBar}">
+                    <DockPanel FlowDirection="RightToLeft">
+                        <StackPanel x:Name="ExtraPanel"
+                                    Visibility="Collapsed"
+                                    HorizontalAlignment="Right"
+                                    Orientation="Horizontal">
+                            <Button IsEnabled="True"
+                                    Command="{TemplateBinding OnDelete}" 
+                                    CommandParameter="{TemplateBinding OnDeleteParameter}"
+                                    Height="50"
+                                    Width="200"
+                                    Content="Удалить"/>
+                            <Border Background="#363636" 
+                                    BorderBrush="#545454"
+                                    BorderThickness="1"
+                                    CornerRadius="3"
+                                    Margin="10 0 10 0">
+                                <TextBlock Text="{TemplateBinding ProcessName}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Foreground="White"
+                                           FontSize="18"
+                                           Margin="10"/>
+                            </Border>
+                        </StackPanel>
+                        <Grid HorizontalAlignment="Stretch" FlowDirection="LeftToRight">
+                            <ProgressBar x:Name="progressBar"
+                                         Background="{TemplateBinding Type, Converter={StaticResource TypeToBackgroundConverter}}"
+                                         Foreground="{TemplateBinding Type, Converter={StaticResource TypeToForegroundConverter}}"
+                                         Value="{TemplateBinding ProgressValue}"
+                                         MaxWidth="1130">
+                            </ProgressBar>
+                            <TextBlock x:Name="progressLabel"
+                                       Text="{TemplateBinding Lable}" 
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontSize="15">
+                            </TextBlock>
+                            <ToggleButton x:Name="ProgressBarToggle"
+                                          HorizontalAlignment="Stretch"
+                                          Height="50"
+                                          Background="Transparent">
+                            </ToggleButton>
+                        </Grid>
+                    </DockPanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=ProgressBarToggle, Path=IsChecked}" Value="True">
+                            <Setter TargetName="ExtraPanel" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="progressBar" Property="BorderBrush" Value="White"/>
+                        </DataTrigger>
+                        <Trigger Property="State" Value="Error">
+                            <Setter TargetName="progressBar" Property="Background" Value="#672121"/>
+                            <Setter TargetName="progressBar" Property="Foreground" Value="#892525"/>
+                        </Trigger>
+                        <Trigger Property="State" Value="Stoped">
+                            <Setter TargetName="progressBar" Property="Background" Value="#6d3775"/>
+                            <Setter TargetName="progressBar" Property="Foreground" Value="#BF732D"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="ProgressBar">
+        <Setter Property="Minimum" Value="0"/>
+        <Setter Property="Maximum" Value="100"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Grid MinHeight="10" MinWidth="20" FlowDirection="LeftToRight">
+                        <Border x:Name="PART_Track"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="3"
+                                BorderThickness="1"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                            <Border x:Name="PART_Indicator"
+                                    Background="{TemplateBinding Foreground}"
+                                    CornerRadius="3"
+                                    Margin="3"
+                                    HorizontalAlignment="Left"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="{x:Type ListViewItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border x:Name="Bd"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

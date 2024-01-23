@@ -6,7 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="Elements" Source="pack://application:,,,/FakeProcess.UI;component/Style/Elements.xaml"/>
+                <ResourceDictionary x:Name="Elements" Source="pack://application:,,,/FakeProcess.UI;component/Themes/Elements.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
